@@ -2,9 +2,17 @@
 
 # Find all JSON files in the current directory and subdirectories
 find . -type f -name '*.json' | while read jsonfile; do
-  # Extract the base name of the file (e.g., IMG_0001.jpg from IMG_0001.jpg.json)
-  jpgfile="${jsonfile%.json}"
-  if [ -f "$jpgfile" ]; then
+  # Extract the directory of the JSON file
+  directory=$(dirname "$jsonfile")
+  
+  # Extract the title from the JSON file
+  title=$(jq -r '.title' "$jsonfile")
+
+  # Construct the full path to the media file
+  mediafile="$directory/$title"
+
+  # Check if the media file exists
+  if [ -f "$mediafile" ]; then
     # Extract creationTime timestamp from the JSON file
     creationTime=$(jq -r '.creationTime.timestamp' "$jsonfile")
     
@@ -16,8 +24,8 @@ find . -type f -name '*.json' | while read jsonfile; do
              "-CreateDate=$creationTimeFormatted" \
              "-DateTimeOriginal=$creationTimeFormatted" \
              "-FileModifyDate=$creationTimeFormatted" \
-             "$jpgfile"
+             "$mediafile"
   else
-    echo "File $jpgfile does not exist."
+    echo "File $mediafile does not exist."
   fi
 done
