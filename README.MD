@@ -14,8 +14,8 @@ This script updates the metadata of JPG files using the information from Google 
 
 #### Ubuntu/Debian
 ```bash
-sudo apt-get install exiftool jq 
+sudo apt-get install exiftool jq parallel
 
 #### Mac
 ```bash
-brew install exiftool jq
+brew install exiftool jq  parallel
